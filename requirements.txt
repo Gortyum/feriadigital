@@ -10,5 +10,5 @@ whitenoise
 djangorestframework
 dotenv
 requests
-decouple
+python-decouple
 dj_database_url
