@@ -1,6 +1,6 @@
 """
 Django settings for proyectoferiadigital project.
-Configurado para desarrollo local seguro (HTTP).
+Configurado para PostgreSQL.
 """
 
 from pathlib import Path
@@ -11,15 +11,11 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
-OPENWEATHERMAP_API_KEY = os.getenv('OPENWEATHERMAP_API_KEY', 'tu_api_key_aqui')
-WEATHER_CACHE_TIMEOUT = 1800  # 30 minutos en segundos
-
-
 # --- Configuración básica ---
-SECRET_KEY = os.getenv("SECRET_KEY", "")  
+SECRET_KEY = os.getenv("SECRET_KEY", "clave-secreta-para-desarrollo")
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0", "192.168.56.1", "26.243.164.252","10.58.3.201"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0", "192.168.56.1", "26.243.164.252", "10.58.3.201"]
 
 # --- Aplicaciones instaladas ---
 INSTALLED_APPS = [
@@ -32,12 +28,12 @@ INSTALLED_APPS = [
     'appferiadigital',
 ]
 
-# --- Middleware (mantiene CSRF, sesiones, etc.) ---
+# --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',  # Protección CSRF activa
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -64,18 +60,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'proyectoferiadigital.wsgi.application'
 
-# --- Base de datos ---
+# --- Base de datos PostgreSQL ---
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE', ''),
-        'NAME': os.getenv('DB_NAME', ''),
-        'USER': os.getenv('DB_USER', ''),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'feria_digital'),
+        'USER': os.getenv('DB_USER', 'postgres'),
         'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', ''),
-        'PORT': os.getenv('DB_PORT', ''),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'client_encoding': 'UTF8',
         },
+        'CONN_MAX_AGE': 600,  # Mantener conexiones por 10 minutos
     }
 }
 
@@ -98,6 +95,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'appferiadigital' / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# --- Media files ---
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # --- Clave primaria por defecto ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -109,3 +110,14 @@ SECURE_HSTS_SECONDS = 0
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
+
+# --- Caché ---
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+# --- API del clima ---
+OPENWEATHERMAP_API_KEY = os.getenv('OPENWEATHERMAP_API_KEY', '')
