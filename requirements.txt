@@ -8,4 +8,4 @@ dj-database-url
 python-decouple
 whitenoise
 djangorestframework
-load_dotenv
+dotenv
