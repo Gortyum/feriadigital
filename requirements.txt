@@ -9,3 +9,4 @@ python-decouple
 whitenoise
 djangorestframework
 dotenv
+requests
