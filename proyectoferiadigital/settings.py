@@ -2,10 +2,11 @@
 Django settings for proyectoferiadigital project.
 Configurado para PostgreSQL.
 """
-
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+from decouple import config
 
 # --- Cargar variables del archivo .env ---
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -62,18 +63,11 @@ WSGI_APPLICATION = 'proyectoferiadigital.wsgi.application'
 
 # --- Base de datos PostgreSQL ---
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'feria_digital'),
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
-        'OPTIONS': {
-            'client_encoding': 'UTF8',
-        },
-        'CONN_MAX_AGE': 600,  # Mantener conexiones por 10 minutos
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 # --- Validación de contraseñas ---
@@ -121,3 +115,4 @@ CACHES = {
 
 # --- API del clima ---
 OPENWEATHERMAP_API_KEY = os.getenv('OPENWEATHERMAP_API_KEY', '')
+WEATHER_CACHE_TIMEOUT = 1800
