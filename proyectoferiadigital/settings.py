@@ -15,7 +15,7 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("SECRET_KEY", "clave-secreta-para-desarrollo")
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0", "192.168.56.1", "26.243.164.252", "10.58.3.201"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0", "192.168.56.1", "26.243.164.252", "10.58.3.201", "feriadigital.onrender.com"]
 
 # --- Aplicaciones instaladas ---
 INSTALLED_APPS = [
