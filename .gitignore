@@ -1,1 +1,7 @@
+# Ignore temporary files and system files
+*.log
+.DS_Store
+.vscode/
+
+# Ignore sensitive information
 .env
