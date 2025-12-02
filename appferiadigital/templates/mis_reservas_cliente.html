@@ -1,0 +1,135 @@
+<!-- templates/mis_reservas_cliente.html -->
+{% extends 'base.html' %}
+
+{% block title %}Mis Reservas - Feria Digital{% endblock %}
+
+{% block content %}
+<h1>📋 Mis Reservas</h1>
+
+{% if reservas %}
+<table>
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Puesto</th>
+            <th>Feria</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reserva in reservas %}
+        <tr>
+            <td>{{ reserva.fecha_reserva|date:"d/m/Y" }}</td>
+            <td>{{ reserva.id_producto.nombre_producto }}</td>
+            <td>{{ reserva.cantidad }}</td>
+            <td>{{ reserva.id_producto.id_puesto.numero_puesto|default:"S/N" }}</td>
+            <td>{{ reserva.id_producto.id_puesto.id_feria.nombre_feria }}</td>
+            <td>
+                <a href="{% url 'cancelar_reserva' reserva.id_reserva %}" 
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('¿Está seguro de cancelar esta reserva?')">
+                    Cancelar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="card">
+    <p>No tienes reservas activas.</p>
+    <a href="{% url 'lista_puestos' %}" class="btn">Explorar Puestos</a>
+</div>
+{% endif %}
+{% endblock %}
+
+<!-- templates/buscar_productos.html -->
+{% extends 'base.html' %}
+
+{% block title %}Buscar Productos - Feria Digital{% endblock %}
+
+{% block content %}
+<h1>🔍 Buscar Productos</h1>
+
+<form method="GET" style="max-width: 100%;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+        <div style="flex: 1; min-width: 200px;">
+            <input type="text" 
+                   name="q" 
+                   value="{{ query }}" 
+                   placeholder="Buscar por nombre..."
+                   style="margin: 0;">
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+            <select name="categoria" style="margin: 0;">
+                <option value="">Todas las categorías</option>
+                {% for cat in categorias %}
+                <option value="{{ cat.id_categoria }}" 
+                        {% if cat.id_categoria|stringformat:"s" == categoria_seleccionada %}selected{% endif %}>
+                    {{ cat.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn">Buscar</button>
+    </div>
+</form>
+
+{% if productos %}
+<div class="grid">
+    {% for producto in productos %}
+    <div class="card">
+        <h3>{{ producto.nombre_producto }}</h3>
+        <p><strong>Categoría:</strong> {{ producto.id_categoria.nombre|default:"Sin categoría" }}</p>
+        <p><strong>Stock:</strong> 
+            <span class="badge {% if producto.stock > 10 %}badge-success{% elif producto.stock > 0 %}badge-warning{% else %}badge-danger{% endif %}">
+                {{ producto.stock }} unidades
+            </span>
+        </p>
+        <p><strong>Puesto:</strong> {{ producto.id_puesto.numero_puesto|default:"S/N" }}</p>
+        <p><strong>Feria:</strong> {{ producto.id_puesto.id_feria.nombre_feria }}</p>
+        <a href="{% url 'detalle_puesto' producto.id_puesto.id_puesto %}" class="btn">Ver Puesto</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <p>No se encontraron productos.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+<!-- templates/lista_ferias.html -->
+{% extends 'base.html' %}
+
+{% block title %}Ferias - Feria Digital{% endblock %}
+
+{% block content %}
+<h1>🏛️ Ferias Disponibles</h1>
+
+{% if ferias %}
+<div class="grid">
+    {% for feria in ferias %}
+    <div class="card">
+        <h2>{{ feria.nombre_feria }}</h2>
+        <p><strong>📍 Ubicación:</strong> {{ feria.ubicacion_feria|default:"No especificada" }}</p>
+        <p><strong>🏪 Puestos:</strong> {{ feria.num_puestos }}</p>
+        {% if feria.aglomeracion %}
+        <p><strong>👥 Aglomeración:</strong> 
+            <span class="badge {% if feria.aglomeracion < 30 %}badge-success{% elif feria.aglomeracion < 70 %}badge-warning{% else %}badge-danger{% endif %}">
+                {{ feria.aglomeracion }}%
+            </span>
+        </p>
+        {% endif %}
+        <a href="{% url 'detalle_feria' feria.id_feria %}" class="btn">Ver Detalles</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <p>No hay ferias disponibles en este momento.</p>
+</div>
+{% endif %}
+{% endblock %}

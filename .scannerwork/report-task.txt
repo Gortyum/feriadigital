@@ -1,0 +1,6 @@
+projectKey=feriadigital
+serverUrl=http://localhost:9000
+serverVersion=25.10.0.114319
+dashboardUrl=http://localhost:9000/dashboard?id=feriadigital
+ceTaskId=1a817685-73e4-44db-afce-908a89d55640
+ceTaskUrl=http://localhost:9000/api/ce/task?id=1a817685-73e4-44db-afce-908a89d55640

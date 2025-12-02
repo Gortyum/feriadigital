@@ -1,0 +1,46 @@
+<!-- appferiadigital/templates/mis_reservas.html -->
+{% extends 'base.html' %}
+
+{% block title %}Mis Reservas{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Reservas de Mis Productos</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Fecha</th>
+                <th>Contacto</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in reservas %}
+            <tr>
+                <td>{{ reserva.id_reserva }}</td>
+                <td>{{ reserva.id_usuario.nombre }}</td>
+                <td>{{ reserva.id_producto.nombre_producto }}</td>
+                <td>{{ reserva.cantidad }}</td>
+                <td>{{ reserva.fecha_reserva }}</td>
+                <td>
+                    {% if reserva.id_usuario.telefono %}
+                    {{ reserva.id_usuario.telefono }}
+                    {% endif %}
+                    {% if reserva.id_usuario.email %}
+                    <br>{{ reserva.id_usuario.email }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No hay reservas registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

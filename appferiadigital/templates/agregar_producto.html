@@ -1,0 +1,49 @@
+<!-- appferiadigital/templates/agregar_producto.html -->
+{% extends 'base.html' %}
+
+{% block title %}Agregar Producto{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Agregar Producto</h2>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="puesto_id" class="form-label">Puesto *</label>
+                    <select class="form-select" id="puesto_id" name="puesto_id" required>
+                        <option value="">Seleccione...</option>
+                        {% for puesto in puestos %}
+                        <option value="{{ puesto.id_puesto }}">
+                            Puesto {{ puesto.numero_puesto|default:puesto.id_puesto }} - {{ puesto.id_feria.nombre_feria }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="nombre" class="form-label">Nombre del Producto *</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="categoria_id" class="form-label">Categoría</label>
+                    <select class="form-select" id="categoria_id" name="categoria_id">
+                        <option value="">Seleccione...</option>
+                        {% for categoria in categorias %}
+                        <option value="{{ categoria.id_categoria }}">{{ categoria.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="stock" class="form-label">Stock *</label>
+                    <input type="number" class="form-control" id="stock" name="stock" min="0" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Agregar Producto</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

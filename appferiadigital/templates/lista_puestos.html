@@ -1,0 +1,32 @@
+<!-- appferiadigital/templates/lista_puestos.html -->
+{% extends 'base.html' %}
+
+{% block title %}Puestos Disponibles{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Puestos Disponibles</h2>
+
+<div class="row">
+    {% for puesto in puestos %}
+    <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Puesto {{ puesto.numero_puesto|default:puesto.id_puesto }}</h5>
+                <p class="card-text">
+                    <strong>Feria:</strong> {{ puesto.id_feria.nombre_feria }}<br>
+                    <strong>Vendedor:</strong> {{ puesto.id_usuario.nombre }}<br>
+                    {% if puesto.id_usuario.telefono %}
+                    <strong>Teléfono:</strong> {{ puesto.id_usuario.telefono }}<br>
+                    {% endif %}
+                </p>
+                <a href="{% url 'detalle_puesto' puesto.id_puesto %}" class="btn btn-primary">Ver Productos</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No hay puestos disponibles.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

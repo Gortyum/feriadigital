@@ -1,0 +1,61 @@
+<!-- Widget de clima reutilizable -->
+<div class="clima-widget card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="card-title mb-0">
+                <i class="bi bi-cloud-sun"></i> Clima
+            </h6>
+            <small class="text-muted">
+                <i class="bi bi-clock"></i> Actualizado
+            </small>
+        </div>
+        
+        {% if clima %}
+        <div class="row align-items-center">
+            <div class="col-4 text-center">
+                <img src="http://openweathermap.org/img/wn/{{ clima.icono }}@2x.png" 
+                     alt="{{ clima.descripcion }}"
+                     class="img-fluid" 
+                     style="max-width: 80px;">
+                <div class="mt-1">
+                    <small class="text-muted">{{ clima.descripcion }}</small>
+                </div>
+            </div>
+            
+            <div class="col-8">
+                <div class="d-flex align-items-center mb-2">
+                    <h2 class="display-6 mb-0 me-2">{{ clima.temperatura }}°C</h2>
+                    <div>
+                        <small class="text-muted d-block">
+                            Sensación {{ clima.sensacion_termica }}°C
+                        </small>
+                        <small class="text-muted">
+                            {{ clima.ciudad }}
+                        </small>
+                    </div>
+                </div>
+                
+                <div class="row small text-muted">
+                    <div class="col-6">
+                        <i class="bi bi-droplet"></i> {{ clima.humedad }}%
+                    </div>
+                    <div class="col-6">
+                        <i class="bi bi-wind"></i> {{ clima.viento_velocidad }} km/h
+                    </div>
+                    <div class="col-6 mt-1">
+                        <i class="bi bi-compass"></i> {{ clima.viento_direccion }}
+                    </div>
+                    <div class="col-6 mt-1">
+                        <i class="bi bi-speedometer2"></i> {{ clima.presion }} hPa
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-3">
+            <i class="bi bi-cloud-slash display-6 text-muted"></i>
+            <p class="mt-2 text-muted">Información del clima no disponible</p>
+        </div>
+        {% endif %}
+    </div>
+</div>

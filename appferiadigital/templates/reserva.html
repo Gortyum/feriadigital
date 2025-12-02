@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2 class="mb-4 text-center">Reservar Producto</h2>
+    <form method="post" class="card p-4 shadow">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Producto</label>
+        <select name="producto" class="form-select">
+          {% for producto in productos %}
+            <option value="{{ producto.id_producto }}">{{ producto.nombre_producto }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Cantidad</label>
+        <input type="number" name="cantidad" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-warning w-100">Confirmar Reserva</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Productos disponibles</h2>
+<div class="row">
+  {% for producto in productos %}
+  <div class="col-md-4 mb-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ producto.nombre_producto }}</h5>
+        <p class="card-text">Categoría: {{ producto.categoria }}</p>
+        <p class="card-text">Precio: ${{ producto.precio_producto }}</p>
+        <a href="{% url 'reserva' %}" class="btn btn-primary">Reservar</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

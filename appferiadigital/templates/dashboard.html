@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Bienvenido, {{ request.session.usuario_nombre }}</h2>
+        
+        {% if rol == 'cliente' %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Panel de Cliente</h5>
+                <p class="card-text">Puedes explorar los puestos disponibles y hacer reservas de productos.</p>
+                <a href="{% url 'lista_puestos' %}" class="btn btn-primary">Ver Puestos</a>
+            </div>
+        </div>
+        {% elif rol == 'vendedor' %}
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Mi Puesto</h5>
+                        <p class="card-text">Administra la información de tu puesto.</p>
+                        <a href="{% url 'mi_puesto' %}" class="btn btn-primary">Ir</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Productos</h5>
+                        <p class="card-text">Agrega productos a tu inventario.</p>
+                        <a href="{% url 'agregar_producto' %}" class="btn btn-primary">Ir</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Reservas</h5>
+                        <p class="card-text">Revisa las reservas de tus productos.</p>
+                        <a href="{% url 'mis_reservas' %}" class="btn btn-primary">Ir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

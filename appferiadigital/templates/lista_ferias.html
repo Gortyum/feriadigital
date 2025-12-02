@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Ferias Disponibles{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Ferias Disponibles</h2>
+
+{% if ferias %}
+<div class="row">
+    {% for feria in ferias %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ feria.nombre_feria }}</h5>
+                <p class="card-text">
+                    <strong>Ubicación:</strong> {{ feria.ubicacion_feria|default:"No especificada" }}
+                </p>
+                
+                <!-- Información adicional -->
+                <div class="d-flex justify-content-between small text-muted mb-3">
+                    <span>
+                        <i class="bi bi-shop"></i> {{ feria.puesto_set.count }} puestos
+                    </span>
+                    {% if feria.aglomeracion %}
+                    <span>
+                        <i class="bi bi-people"></i> {{ feria.aglomeracion }}%
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <!-- Clima -->
+                {% if feria.clima %}
+                <div class="clima-mini border rounded p-3 mb-3 bg-light">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <img src="http://openweathermap.org/img/wn/{{ feria.clima.icono }}.png" 
+                                 alt="{{ feria.clima.descripcion }}" 
+                                 width="50">
+                        </div>
+                        <div>
+                            <strong class="h5 mb-0">{{ feria.clima.temperatura }}°C</strong>
+                            <div class="small">{{ feria.clima.descripcion }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <a href="{% url 'detalle_feria' feria.id_feria %}" class="btn btn-primary w-100">
+                    Ver Detalles
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No hay ferias disponibles.</div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    No hay ferias disponibles.
+</div>
+{% endif %}
+{% endblock %}

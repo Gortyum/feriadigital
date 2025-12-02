@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ feria.nombre_feria }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Información principal -->
+    <div class="col-md-8">
+        <h2 class="mb-3">{{ feria.nombre_feria }}</h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Información de la Feria</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="bi bi-geo-alt"></i> Ubicación:</strong><br>
+                        {{ feria.ubicacion_feria|default:"No especificada" }}</p>
+                    </div>
+                    {% if feria.aglomeracion %}
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="bi bi-people"></i> Aglomeración estimada:</strong><br>
+                        {{ feria.aglomeracion }}%</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Puestos -->
+        <h4 class="mb-3">Puestos en esta feria</h4>
+        {% if puestos %}
+        <div class="row">
+            {% for puesto in puestos %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            Puesto {{ puesto.numero_puesto|default:puesto.id_puesto }}
+                        </h6>
+                        <p class="card-text">
+                            <strong>Vendedor:</strong> {{ puesto.id_usuario.nombre }}<br>
+                            {% if puesto.id_usuario.telefono %}
+                            <strong>Teléfono:</strong> {{ puesto.id_usuario.telefono }}<br>
+                            {% endif %}
+                            <strong>Productos:</strong> {{ puesto.producto_set.count }}
+                        </p>
+                        <a href="{% url 'detalle_puesto' puesto.id_puesto %}" class="btn btn-sm btn-primary">
+                            Ver Productos
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No hay puestos en esta feria.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Panel lateral - Clima -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-cloud-sun"></i> Condiciones Climáticas</h5>
+            </div>
+            <div class="card-body">
+                {% if clima %}
+                <div class="text-center mb-4">
+                    <img src="http://openweathermap.org/img/wn/{{ clima.icono }}@2x.png" 
+                         alt="{{ clima.descripcion }}"
+                         width="100">
+                    <h2 class="mt-3">{{ clima.temperatura }}°C</h2>
+                    <p class="lead">{{ clima.descripcion|capfirst }}</p>
+                    <small class="text-muted">{{ clima.ciudad }}</small>
+                </div>
+                
+                <div class="row text-center">
+                    <div class="col-6 mb-3">
+                        <div class="p-2 border rounded">
+                            <i class="bi bi-thermometer-half fs-4 d-block mb-2"></i>
+                            <small>Sensión</small>
+                            <div><strong>{{ clima.sensacion_termica }}°C</strong></div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="p-2 border rounded">
+                            <i class="bi bi-droplet fs-4 d-block mb-2"></i>
+                            <small>Humedad</small>
+                            <div><strong>{{ clima.humedad }}%</strong></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 border rounded">
+                            <i class="bi bi-wind fs-4 d-block mb-2"></i>
+                            <small>Viento</small>
+                            <div><strong>{{ clima.viento_velocidad }} km/h</strong></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 border rounded">
+                            <i class="bi bi-compass fs-4 d-block mb-2"></i>
+                            <small>Dirección</small>
+                            <div><strong>{{ clima.viento_direccion }}</strong></div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="bi bi-cloud-slash fs-1 text-muted mb-3"></i>
+                    <p>Información del clima no disponible</p>
+                    <small class="text-muted">
+                        La feria necesita tener una ciudad configurada para mostrar el clima.
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Acciones</h6>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'lista_ferias' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver a Ferias
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

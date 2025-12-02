@@ -1,0 +1,61 @@
+<!-- appferiadigital/templates/mi_puesto.html -->
+{% extends 'base.html' %}
+
+{% block title %}Mi Puesto{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Mi Puesto</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Crear Nuevo Puesto</h5>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="feria_id" class="form-label">Feria *</label>
+                    <select class="form-select" id="feria_id" name="feria_id" required>
+                        <option value="">Seleccione...</option>
+                        {% for feria in ferias %}
+                        <option value="{{ feria.id_feria }}">{{ feria.nombre_feria }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="numero_puesto" class="form-label">Número de Puesto</label>
+                    <input type="text" class="form-control" id="numero_puesto" name="numero_puesto">
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-success w-100">Crear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h4 class="mb-3">Mis Puestos</h4>
+
+<div class="row">
+    {% for puesto in puestos %}
+    <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Puesto {{ puesto.numero_puesto|default:puesto.id_puesto }}</h5>
+                <p class="card-text">
+                    <strong>Feria:</strong> {{ puesto.id_feria.nombre_feria }}<br>
+                    {% if puesto.id_feria.ubicacion_feria %}
+                    <strong>Ubicación:</strong> {{ puesto.id_feria.ubicacion_feria }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No tienes puestos registrados.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
